@@ -17,6 +17,7 @@ import { MockInterview } from '@/utils/schema';
 import { v4 as uuidv4 } from 'uuid';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
+import { db } from '@/utils/db';
 
 function AddNewInterview() {
   const [openDialog, setOpenDialog] = useState(false)
@@ -38,7 +39,7 @@ function AddNewInterview() {
     console.log(JSON.parse(MockJsonResp));
     setJsonResponse(MockJsonResp);
     if (MockJsonResp) {
-      const resp = await db.insert(mockInterview)
+      const resp = await db.insert(MockInterview)
         .values({
           mockId: uuidv4(),
           jsonMockResp: MockJsonResp,
