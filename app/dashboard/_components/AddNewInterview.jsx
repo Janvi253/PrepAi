@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
 import { db } from '@/utils/db';
+import { useRouter } from 'next/navigation';
 
 function AddNewInterview() {
   const [openDialog, setOpenDialog] = useState(false)
@@ -26,7 +27,8 @@ function AddNewInterview() {
   const [jobExperience, setJobExperience] = useState();
   const [loading, setLoading] = useState(false);
   const [jsonResponse, setJsonResponse] = useState([]);
-  const { user } = useUser();
+  const router=useRouter();
+  const {user} = useUser();
 
   const onSubmit = async (e) => {
     setLoading(true);
@@ -41,15 +43,19 @@ function AddNewInterview() {
     if (MockJsonResp) {
       const resp = await db.insert(MockInterview)
         .values({
-          mockId: uuidv4(),
-          jsonMockResp: MockJsonResp,
-          jobPosition: jobPosition,
-          jobDesc: jobDesc,
+          mockId:uuidv4(),
+          jsonMockResp:MockJsonResp,
+          jobPosition:jobPosition,
+          jobDesc:jobDesc,
           jobExperience: jobExperience,
-          createdBy: user?.primaryEmailAddress?.emailAddress,
-          createdAt: moment().format('DD-MM-YYYY')
+          createdBy:user?.primaryEmailAddress?.emailAddress,
+          createdAt:moment().format('DD-MM-YYYY')
         }).returning({ mockId: MockInterview.mockId });
       console.log("Inserted ID:", resp)
+      if(resp){
+        setOpenDialog(false);
+        router.push('/dashboard/interview/'+resp[0]?.mockId)
+      }
     }
     else{
       console.log("Error in generating interview questions");
