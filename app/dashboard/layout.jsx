@@ -1,10 +1,10 @@
 import React from 'react'
-import header from './_components/header'
+import Header from './_components/Header'
 
 function DashboardLayout({children}) {
   return (
     <div>
-      <header/>
+      <Header/>
       <div className='mx-5 md:mx-20 lg:mx-36'>
         {children}
       </div>

@@ -10,20 +10,26 @@ import { Button } from '@/components/ui/button';
 function Interview({ params }) {
     const [interviewData, setInterviewData] = useState();
     const [webcamEnabled, setWebcamEnabled] = useState(false);
-    useEffect(() => {
-        console.log(params.interviewId)
-        GetInterviewDetails();
-    }, [])
-    /**
-     * used to get interview details by mockId/interview id
-     */
+    const [interviewId, setInterviewId] = useState(null);
 
-    const GetInterviewDetails = async () => {
+    const GetInterviewDetails = async (id) => {
         const result = await db.select().from(MockInterview)
-            .where(eq(MockInterview.mockId, params.interviewId))
+            .where(eq(MockInterview.mockId, id))
         console.log(result);
         setInterviewData(result[0]);
     }
+
+    useEffect(() => {
+        params.then(unwrappedParams => {
+            console.log(unwrappedParams.interviewId);
+            setInterviewId(unwrappedParams.interviewId);
+            GetInterviewDetails(unwrappedParams.interviewId);
+        });
+    }, [params]);
+
+    /**
+     * used to get interview details by mockId/interview id
+     */
 
     return (
         <div className='my-10'>
@@ -31,18 +37,18 @@ function Interview({ params }) {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-10'>
                 <div className='flex flex-col my-5 gap-5'>
                     <div className='flex flex-col p-5 rounded-lg border gap-5'>
-                    {interviewData ? (
-                        <>
-                            <h2 className='text-lg'><strong>Job Role/Job Position:</strong>{interviewData.jobPosition}</h2>
-                            <h2 className='text-lg'><strong>Job Description/Tech Stack:</strong>{interviewData.jobDesc}</h2>
-                            <h2 className='text-lg'><strong>Years of Experience:</strong>{interviewData.jobExperience}</h2>
-                        </>
-                    ) : (
-                        <p>Loading interview details...</p>
-                    )}
+                        {interviewData ? (
+                            <>
+                                <h2 className='text-lg'><strong>Job Role/Job Position:</strong>{interviewData.jobPosition}</h2>
+                                <h2 className='text-lg'><strong>Job Description/Tech Stack:</strong>{interviewData.jobDesc}</h2>
+                                <h2 className='text-lg'><strong>Years of Experience:</strong>{interviewData.jobExperience}</h2>
+                            </>
+                        ) : (
+                            <p>Loading interview details...</p>
+                        )}
                     </div>
                     <div className='p-5 border rounded-lg border-blue-200 bg-blue-100'>
-                        <h2 className='flex gap-2 items-center text-blue-800'><Lightbulb/><strong>Information</strong></h2>
+                        <h2 className='flex gap-2 items-center text-blue-800'><Lightbulb /><strong>Information</strong></h2>
                         <h2 className='mt-3 text-blue-950'>{process.env.NEXT_PUBLIC_INFORMATION}</h2>
                     </div>
                 </div>
@@ -64,13 +70,10 @@ function Interview({ params }) {
                     }
                 </div>
             </div>
-
             <div className='flex justify-end items-end'>
                 <Button>Start Interview</Button>
             </div>
         </div>
-
-
     )
 }
 
