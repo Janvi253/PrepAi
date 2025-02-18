@@ -32,8 +32,4 @@ function Header() {
   )
 }
 
-<<<<<<< HEAD:app/dashboard/_components/header.jsx
 export default Header
-=======
-export default header
->>>>>>> aa1f4df04ed247ec8c7638ef0a09a945f9964860:app/dashboard/_components/Header.jsx
