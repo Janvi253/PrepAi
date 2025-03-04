@@ -23,6 +23,7 @@ function RecordAnsSection({ mockInterviewQuestions, activeQuestionsIndex, interv
         results,
         startSpeechToText,
         stopSpeechToText,
+        setResults
     } = useSpeechToText({
         continuous: true,
         useLegacyResults: false
@@ -75,16 +76,20 @@ function RecordAnsSection({ mockInterviewQuestions, activeQuestionsIndex, interv
             })
 
         if (resp) {
-            toast('User Answer Recorded Successfully')
+            toast('User Answer Recorded Successfully');
+            setUserAnswer('');
+            setResults([]);
         }
-        setUserAnswer('');
+        setResults([]);
+        
+        
         setLoading(false);
     }
 
     return (
         <div className='flex items-center justify-center flex-col'>
             <div className='flex flex-col mt-20 items-center justify-center bg-black rounded-lg p-5'>
-                <Image src={'/webcam.png'} width={200} height={200}
+                <Image alt="" src={'/webcam.png'} width={200} height={200}
                     className='absolute' />
                 <Webcam
                     mirrored={true}
