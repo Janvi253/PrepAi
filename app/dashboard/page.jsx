@@ -11,7 +11,7 @@ function Dashboard() {
       <div className='grid grid-cols-1 md:grid-cols-3 my-5'>
         <AddNewInterview />
       </div>
-       <InterviewList/>
+      <InterviewList />
     </div>
 
   )
